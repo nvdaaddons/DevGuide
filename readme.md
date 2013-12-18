@@ -1,4 +1,6 @@
-[[!meta title="NVDA Add-on Development Guide"]]
+<title>NVDA add-on Development Guide</title>
+
+# NvDA Add-on Development Guide
 
 Welcome to NVDA add-on Development Guide. This is the one-stop guide on how NvDA add-ons are developed, as well as explaining some useful code segments from NvDA core source code useful when writing add-ons.
 
@@ -20,11 +22,12 @@ Copyright: NVDA is copyright 2006-2013 NV Access. Microsoft Windows, Microsoft O
 
 To create an add-on for NVDA, please make sure the following system requirements are met:
 
-* A version of NVDA is available on your computer (either a portable or installed version will work, but we strongly recommend that you install a copy of NVDA on your development computer).
-* Python 2.7 series, version 2.7.6 32-bit for Windows: http://www.python.org/download/releases/2.7.6/
-* SCons 2, version 2.3.0 for generating add-on packages: http://www.scons.org/
-* Markdown 2.0.1 or later for generating add-on documentation: https://pypi.python.org/pypi/Markdown/2.0.1
-* GNU Gettext package for Windows for message localization support. The build can be found at: http://gnuwin32.sourceforge.net/downlinks/gettext.php
+* A version of NVDA is available on your computer (either a portable or installed version will work, but we strongly recommend that you install a copy of NVDA on your development computer). Download NVDA from NV access page at http://www.nvaccess.org.
+* Python 2.7 series, version 2.7.6 32-bit for Windows: <http://www.python.org/download/releases/2.7.6/>
+* SCons 2, version 2.3.0 for generating add-on packages: <http://www.scons.org/>
+* Markdown 2.0.1 or later for generating add-on documentation: <https://pypi.python.org/pypi/Markdown/2.0.1>
+* GNU Gettext package for Windows for message localization support. The build can be found at: <http://gnuwin32.sourceforge.net/downlinks/gettext.php>
+ * Once downloaded, copy both exe files to your add-on development folder.
 * Git 1.7.9 or later if you wish to upload the add-on to a repository such as Bitbucket (optional, see below). You can use various Git clients, such as Git Bash, Cygwin's Git, Tortoise Git and so forth.
 * The NVDA Community Add-on template for ease of add-on file and folder packaging and management (optional; [click here][3] to download the add-on template).
 * Additional Python modules or dependencies for your add-on.
