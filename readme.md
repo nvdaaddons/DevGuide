@@ -404,6 +404,8 @@ Example 2 deals with an app module which has two objects for dealing with specif
 
 In both cases, the object that we wish to check must be inserted as the first element of the clsList. The effect is that these custom objects will take precedence when looking up gestures or code (behavior) for the object, and in the developer info, these custom objects will come first when MRO (Method Resolution Order) for the navigator object is displayed.
 
+Note: You may need to tune these two methods to provide correct overlay classes for very specific controls (such as checking names, specific roles, etc.), otherwise you may find that two or more identical-looking controls are assigned to your custom object when in fact they are very different.
+
 ### Input and output: scripts and UI messages ###
 
 Another crucial component of add-ons is handling commands from users and displaying what the add-on is doing. These are done via scripts (input) and UI messages (output).
@@ -412,7 +414,7 @@ A script is a method run when the user performs certain commands. For example, w
 
 Typically, an add-on which accepts scripts will have a list of command:function map somewhere in the module. The simplest is a gestures (commands) dictionary, a python dictionary (typically named __gestures) which holds commands as keys and scripts as values for these keys (more than one key, or command can be bound to scripts). These dictionaries are loaded when add-on loads and is cleared when either NvDA exits or the app for the app module loses focus (that is, the user has switched to another program).
 
-Another way to bind scripts is via runtime insertion. This is done by creating another gestures dictionary apart from __gestures dictionary which holds context-sensitive gestures such as manipulating a single control. Then the developer would use inputCore.bindGesture (or inputCore.bindGestures if more than one gestures/scripts are defined) to define certain gestures for a time, then using inputCore.clearGestures then inputCore.bindGestures(__gestures) to remove the added gestures. A more elegant way, which involves scripts for specific objects, will be covered when we talk about overlay classes.
+Another way to bind scripts is via runtime insertion. This is done by creating another gestures dictionary apart from __gestures dictionary which holds context-sensitive gestures such as manipulating a single control. Then the developer would use inputCore.bindGesture (or inputCore.bindGestures if more than one gestures/scripts are defined) to define certain gestures for a time, then using inputCore.clearGestures then inputCore.bindGestures(__gestures) to remove the added gestures. A more elegant way, which involves scripts for specific objects, will be covered when we talk about app modules and assigning gestures to specific parts of a program.
 
 In a similar manner to scripts, the UI module allows you to say or braille what your add-on is doing. This is done by using `ui.message(something to say)` where `something to say` is replaced by a string for NVDA to say. We'll not go over `ui.message` here (you'll see examples of those), but what's more important is scripts, so we'll focus on that in this section.
 
@@ -476,6 +478,47 @@ Because of the above rule, one should be careful when defining a script for an a
 1. First, consult the NVDA commands quick reference to see if the command you wish to use has been defined in global commands. You should try to minimize conflicts with built-in NVDA commands. An exception is commands for app modules where same command may be used differently from one program to another.
 2. Read the documentation for add-ons (especially global plugins) to see if any add-on is using this command, and if so, contact the add-on author to come up with an alternate binding.
 
+### Events ###
+
+You can ask NvDA to do something if something happens. For example, you can ask NvDA to say the new name for an object when it's name changes, or say the new item's value when the item gets focused. These conditions, or actions are called events.
+
+When an event occurs, NVDA does the following:
+
+1. Finds out what the event was (for example, a check box gains focus).
+2. Performs actions for the event (e.g. says the name and the checked state of this check box).
+3. Passes the event down the chain in case other objects may have actions associated with the event.
+
+Each event's action routine is composed of four parts: the event, the object for which the event is "fired" (dealt with), the action and a call to the next handler for the event. A typical event routine looks like this:
+
+	def event_eventName(self, obj, nextHandler):
+		# Do some action.
+		nextHandler()
+
+In fact, we have met an actual "event" before: `event_NVDAObject-Init`. This is a special event (one of many events defined in nvDA) fired when NVDA meets a new object and initializes it according to your input (see the section on overriding object properties for more information). Let's meet other events you may see while wriring your add-on.
+
+### Example 4: Announcing the changed name of a control ###
+
+The below code came from one of the add-on app modules.
+
+Below is a routine for an event which tells you the name of some text on the screen when the text changes.
+
+	def event_nameChange(self, obj, nextHandler):
+		if obj.windowClassName == "TStaticText": ui.message(obj.name)
+		nextHandler()
+
+As you can see, whenever the text object's name changes, NvDA will announce the new name to the user. The "name change" event is one of the many events that you can define custom actions for in your add-on (the complete list is below).
+
+Note: You can define events for any object of your choice, especially controls in a program (where you can define custom actions for events in your app module). If this is the case, you need to make sure that the control meets certain conditions you set, such as name, role and so forth to let NVDA keep an "eye" on that specific object.
+
+### List of possible events ###
+
+This is a list of events you may define custom actions for in your add-on:
+
+* gainFocus: The user has moved the focus to a specific control, or the user has just switched to a program.
+* loseFocus: Opposite of gainFocus.
+* nameChange: The name of a control has changed (see above for an example).
+* valueChange: The value of the control (such as checked, selected, etc.) has changed.
+
 
 	# Future sections #
 
@@ -492,7 +535,7 @@ Planned sections (please feel free to contribute your knowledge in this section)
 * Fetching and setting objects (done).
 * Object hierarchy and differences between regular and simple review modes (almost done).
 * The event_NVDAObject_init and chooseNVDAObjectOverlayClasses methods (done).
-* Events and list of available events.
+* Events and list of available events (not quite done).
 * Next handlers.
 * Input from keyboard, braille displays, mouse and touchscreen via scripts (almost done).
 * Script lookup process and conflicts (done, may need additional tips from others).
