@@ -404,7 +404,7 @@ Example 2 deals with an app module which has two objects for dealing with specif
 
 In both cases, the object that we wish to check must be inserted as the first element of the clsList. The effect is that these custom objects will take precedence when looking up gestures or code (behavior) for the object, and in the developer info, these custom objects will come first when MRO (Method Resolution Order) for the navigator object is displayed.
 
-Note: You may need to tune these two methods to provide correct overlay classes for very specific controls (such as checking names, specific roles, etc.), otherwise you may find that two or more identical-looking controls are assigned to your custom object when in fact they are very different.
+Note: You may need to tune these two methods to provide correct overlay classes for very specific controls (such as checking names, specific roles, etc.), otherwise you may find that two or more identical-looking controls are assigned to your custom object when in fact they are very different. Also, the event_NVDAObject_init is only available in app modules.
 
 ### Input and output: scripts and UI messages ###
 
@@ -422,7 +422,7 @@ As of time of writing, NvDA supports input from the keyboard, braille displays w
 
 ### Example 2: A basic script dictionary and message output ###
 
-In this example, we'll define two scripts called "sayHello" and say"GoodBye", then bind them into two separte gestures.
+In this example, we'll define two scripts called "sayHello" and say"GoodBye", then bind them into two separate gestures.
 
 	# An example fragment for script assignment from a global plugin.
 	import ui
@@ -442,7 +442,7 @@ Now when you press Control+NvDA+1, NvDA will say, "Hello", and when you press Co
 
 ### Example 3: Scripts for specific objects ###
 
-As in specialist objects above, scripts can be assigned to certain objects by specifying gestures dictionary for this particular object. Here is an example from a app module which defines scripts for main window of a media player program:
+As in specialist objects above, scripts can be assigned to certain objects by specifying gestures dictionary for this particular object. Here is an example from an app module which defines scripts for main window of a media player program:
 
 	# Scripts for objects for a program.
 	from NvDAObjects.IAccessible import IAccessible
@@ -517,10 +517,53 @@ This is a list of events you may define custom actions for in your add-on:
 * gainFocus: The user has moved the focus to a specific control, or the user has just switched to a program.
 * loseFocus: Opposite of gainFocus.
 * nameChange: The name of a control has changed (see above for an example).
-* valueChange: The value of the control (such as checked, selected, etc.) has changed.
+* valueChange: The value of the control such as text of a field has changed.
+* stateChange: Useful to keep track of whether check boxes, buttons and other control's state (checked, selected, etc.) has changed.
+* foreground: the object we're interested in has become the foreground window of the program.
+
+### Let's build an add-on ###
+
+Now we have a basic overview of components of add-ons, we're ready to build some simple add-ons. But first, let's go over the actual add-on development process, debugging tips, do's and don'ts and other tips.
+
+### Add-on planning and development tips ###
+
+Over the years, the NVDA community built a number of powerful add-ons for NvDA users. Over the course of these years, the add-on writers gathered some useful tips when it comes to writing your own add-ons. Here are a number of them:
+
+* Get to know NVDA: it is important that you become familiar with NVDA commands, concepts and tips. Subscribe to NVDA users groups to learn more about NVDA and learn about how NvDA works, as you'll be extending it via your add-ons.
+* Get to know the product at hand: as noted earlier, it is important that you get to know the software you're writing the app module for, synthesizers and braille displays you'll be writing the driver for and so on.
+* Plan ahead: if you know you'll be maintaining your add-on for a number of months or years, it is useful to have a plan and write the add-on code to prepare for future extensions. For example, working on features that you need to implement now, dividing parts of a program to objects and so on.
+* Ready to debug and test your add-on: writing your add-on code is just one part of the overall add-on development. The other part is testing and debugging your add-on to make sure that users use your add-on with minimal errors. As you write your add-ons, be sure to test your code regularly.
+* Most importantly, have fun.
+
+### Do's and don'ts ###
+
+Here are a few things you should do and not do throughout add-on development:
+
+1. Do talk with users: it is important to remember that your add-ons will be used by NvDA users around the world, so it is important to keep in touch with your users to gather bug reports and suggestions.
+2. Do ask for help if needed: If you're stuck, you can ask other add-on writers anytime for solutions or tips, or if you need to, ask for colaboration from other add-on developers.
+3. Do test your add-on on more than one computer: sometimes, a bug in one computer may help you solve problems on your add-on on your computer later.
+4. Don't use fancy code without understanding your intentions: a typo or forgotten indentation can become troublesome when you debug an add-on.
+5. Do keep up to date with NvDA core changes: sometimes, you may find that your add-on might not work due to NVDA core code changes. Be sure to read "changes for developers" section in NvDA's What's New document to keep up to date with code changes that may affect your add-on.
+
+### Frequently Asked Questions about add-on components and development ###
+
+Q. When I try to obtain an object using an index, it fetches an object one after the index I wrote.  
+This is the side effect of zero-based indexing (count starts at 0).
+
+Q. When importing a module, NVDA says it cannot locate the module.  
+Did you type the correct name of the module? Did you extract the module files in the correct location? Try fixing the typo, look at the import path and try importing again.
+
+Q. What is difference between simple review and normal review and which one should I use?  
+Simple review excludes layout objects such as windows, grouping and so on which are placed for layout purposes. Normal review includes these as well. The choice of using simple review versus normal review depends on your situation.
+
+Q. The command for my app module does not work in my app module; instead, NvDA does something else.  
+Check if a global plugin which uses the command is installed. First, remove the global plugin and try again.
+
+We did not include programming or Python-related FAQ's, as there are sites which answers questions about Python such as coding style. Consult these documents if you have issues with Python code.
 
 
-	# Future sections #
+
+# Future sections #
 
 Please delete this notice when appropriate sections are done.
 
@@ -530,17 +573,9 @@ Includes introductions to input and scripts, output systems, objects, events, co
 
 Planned sections (please feel free to contribute your knowledge in this section):
 
-* Introduction to NVDA objects (almost done).
-* Examining object attributes with Python Console (done).
-* Fetching and setting objects (done).
-* Object hierarchy and differences between regular and simple review modes (almost done).
-* The event_NVDAObject_init and chooseNVDAObjectOverlayClasses methods (done).
 * Events and list of available events (not quite done).
-* Next handlers.
-* Input from keyboard, braille displays, mouse and touchscreen via scripts (almost done).
 * Script lookup process and conflicts (done, may need additional tips from others).
 * Static and dynamic script bindings, gesture dictionaries and script categories (categories are not done).
-* Braille, speech and tone output (done).
 * Debugging add-ons.
 * If something goes wrong (common errors and exceptions).
 * Few working and non-working examples for each topic.
