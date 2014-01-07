@@ -478,6 +478,11 @@ Because of the above rule, one should be careful when defining a script for an a
 1. First, consult the NVDA commands quick reference to see if the command you wish to use has been defined in global commands. You should try to minimize conflicts with built-in NVDA commands. An exception is commands for app modules where same command may be used differently from one program to another.
 2. Read the documentation for add-ons (especially global plugins) to see if any add-on is using this command, and if so, contact the add-on author to come up with an alternate binding.
 
+### Few other remarks on scripts ###
+
+* You can define a script category to show the user where your add-on script will be used (shown in Input Gestures dialog in NVDA 2013.3 or later). There are two ways of doing this: module level via `scriptCategory` attribute from the add-on module, or designating the category for each script via `script_name.category` attribute. It is recommended that you name your script category the same as the add-on name.
+* You can define the input help mode message for a script by using `__doc__` attribute.
+
 ### Events ###
 
 You can ask NvDA to do something if something happens. For example, you can ask NvDA to say the new name for an object when it's name changes, or say the new item's value when the item gets focused. These conditions, or actions are called events.
@@ -520,6 +525,10 @@ This is a list of events you may define custom actions for in your add-on:
 * valueChange: The value of the control such as text of a field has changed.
 * stateChange: Useful to keep track of whether check boxes, buttons and other control's state (checked, selected, etc.) has changed.
 * foreground: the object we're interested in has become the foreground window of the program.
+
+### Other components ###
+
+Besides objects, scripts and events, you can add other components in your add-on for working with specific controls. For example, you can use a textInfo module (such as NVDAObjects.NvDAObjectTextInfo) for working with text in edit fields and other controls, or use external modules from third-party developers for specialized tasks such as windows registry access (_winreg) and others. You can also use Python's built-in modules (such as time, functools, etc.) for advanced operations.
 
 ### Let's build an add-on ###
 
