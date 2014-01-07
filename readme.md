@@ -570,7 +570,81 @@ Check if a global plugin which uses the command is installed. First, remove the 
 
 We did not include programming or Python-related FAQ's, as there are sites which answers questions about Python such as coding style. Consult these documents if you have issues with Python code.
 
+Now that we have covered basic add-on components, let's learn about how to package what you know in your add-on modules themselves: global plugins, app modules and drivers.
 
+## Introduction to global plugins ##
+
+A global plugin adds features available everywhere. For example, if there is a control that will be used in many applications, then you can write a global plugin to handle them throughout NVDA. Another example is adding additional features to NvDA that can be used in all programs, such as OCR capability, place marker management and so on.
+
+A global plugin is a Python source code (.py) file with the name of your plugin. For example, if you're adding support for rich edit fields in many applications, you can name your plugin as richEditSupport.py. When naming them, try be brief so you can see what your plugin does.
+
+### Typical development plan for global plugins ###
+
+Typically, a global plugin is developed thus:
+
+1. You or someone suggests a feature or support for a particular control across different programs.
+2. You plan your global plugin (see the section on when to write or not write global plugins).
+3. You write your global plugin and test it. Once it is done and tested, you release the plugin.
+
+Since global plugins are Python files, you can use the full power of python in your add-on code. Also, since global plugins have access to full power of NVDA code such as events, scripts and objects, you can use the concepts you learned from previous sections.
+
+### The global plugin code ###
+
+As shown earlier, the procedure for writing global plugins is same as writing any Python program, except that you import globalPluginHandler and put your add-on code in a class called `GlobalPlugin` which inherits from `globalPluginHandler.GlobalPlugin` (see the example in the firse intro chapter). If you need to use third-party modules, you need to place the package in the same folder as the global plugin file and import the external module(s). Then define objects (usually overlay objects), methods and so on in your code.
+
+### When to write or not write global plugins ###
+
+Since global plugins are used everywhere, you might be tempted to write support for a single application using global plugin alone. However, this is not the case. There are other guidelines to keep in mind when deciding whether to write a global plugin or not:
+
+You might consider writing a global plugin if:
+
+1. You or a user wishes to use a certain feature everywhere.
+2. You need to support same controls across different applications, provided that the control behaves the same in these programs.
+
+You should not write a global plugin if:
+
+1. If you wish to enhance support for a single application.
+2. You are writing support for speech synthesizers or braille displays.
+
+### Few more things to remember about global plugins ###
+
+* When you write scripts in your global plugin, the commands you assign to them will take precedence (looked up first). Therefore it is important to consult the NVDA user guide and help for other add-ons to minimize command conflicts.
+* Each global plugin must be placed in globalPlugins directory in your add-on folder structure.
+* It is possible to use more than one Python file in your global plugin. If this is the case, you need to put them in a folder (name must be the name of the plugin) inside globalPlugins folder, with the main plugin file named __init__.py.
+* If you need to do something when the global plugin is loaded (such as loading the user configuration), you need to write an __init__ method in your plugin class. In this method, you need to call the __init__ method in the super (globalPluginHandler.GlobalPlugin) first before doing other startup work.
+
+Let's go through some examples and exercises.
+
+### Example 1: Writing computer braille using QWERTY keyboard ###
+
+You are meeting with a client who uses Duxbury braille translator (a popular braille document production program). This client is working with another user of NVDA who wishes to write computer braille from his computer keyboard everywhere. Based on this, you decide to write a global plugin, and found a module that allows the computer keyboard to act like a braille keyboard using a function.
+
+The global plugin, named brailleWrite.py, would look like this:
+
+	# An example global plugin.
+	
+	import qtbrl # The braille entry module.
+	import globalPluginHandler
+	
+	class GlobalPlugin(globalPluginHandler.GlobalPlugin):
+		brlentry = False # Braille entry is not active.
+		
+		def script_toggleBrailleEntry(self, gesture):
+			self.brlentry = True if self.brlentry == False else False # Toggle braille entry mode.
+		script_toggleBrailleEntry.__doc__="Toggles braille entry on or off."
+		__gestures={
+			"kb:NVDA+X":"toggleBrailleEntry"
+		}
+
+With this background in mind, try some of the short exercises below.
+
+### Exercises ###
+
+1. Write a global plugin named nvdaVersion.py to say the current NVDA version when nvDA+Shift+V is pressed.
+2. A user wants to hear the time announced every minute. Using the clock on the system tray, write a global plugin to announce when the time changes (hint: you need to use an event and check the role of the clock object).
+
+
+		
 
 # Future sections #
 
