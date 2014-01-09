@@ -643,8 +643,90 @@ With this background in mind, try some of the short exercises below.
 1. Write a global plugin named nvdaVersion.py to say the current NVDA version when nvDA+Shift+V is pressed.
 2. A user wants to hear the time announced every minute. Using the clock on the system tray, write a global plugin to announce when the time changes (hint: you need to use an event and check the role of the clock object).
 
+## Introduction to app modules ##
 
+An app module enhances support for a particular program. For example, you can write an app module which adds convenience commands for reading various parts of the screen, or you can define how a particular control should behave in a program.
+
+An app module is a Python (.py) file with the name corresponding to the executable name of a program. For example, an app module for Winamp is named winamp.py since Winamp's executable name is winamp.exe.
+
+NVDA itself comes with several app modules, such as Winamp, Adobe Reader, Microsoft Office programs and so on.
+
+### Differences between app modules and global plugins ###
+
+At first glance, app modules may look the same as any global plugin. However, app modules have additional properties that global plugins lack, including:
+
+* Instead of `globalPluginHandler`, you need to import `appModuleHandler`. The class to implement is `AppModule(appModuleHandler.AppModule)`.
+* App modules are stored in appModules folder in your add-on directory structure and is named the same as the executable name of the program.
+* You can ask NVDA to enter sleep mode in a program where NvDA will not speak or braille anything while using the program, and any keyboard commands you press will be handled by the program directly. This is done by setting `sleepMode` attribute in the AppModule class to True.
+* The `event_NVDAObject_init` routine is only available in app modules.
+
+### App module development process and strategies ###
+
+A typical app module is developed thus:
+
+1. You or a user requests enhanced support for a program.
+2. If possible, contact the app vendor (programmer) to ask accessibility improvements for the program from their end.
+3. With or without cooperation from app vendor, you would examine how the program works and areas on the screen that needs to be read out.
+4. Write and test the app module (with users) until the app module is ready for release.
+
+As you write app modules, try these tips:
+
+1. Use objects to represent parts of a program. This is done in two steps: define the control for parts of a program via objects (inheriting from some object such as IAccessible), then use `chooseNVDAObjectOverlayClasses` routine to tell NVDA to work with your custom object when working with that control.
+2. If possible, test your app module using two or more versions of the program to make sure your app module works with those versions.
+3. You should not incorporate all desired features in version 1.0 - leave some of them for a future release.
+
+### Example 2: Simple app module in Notepad ###
+
+Suppose you wish to find out which line you're editing in Notepad. Assuming that Notepad will show status bar at all times, you wish to assign a key combination to read the current line number.
+
+The app module for NOtepad wuld look like this:
+
+	# The example app module for Notepad, notepad.py.
+	import appModuleHandler
+	import api
+	import ui
+	
+	class AppModule(appModuleHandler.AppModule):
+		def script_sayLineNumber(self, gesture):
+			# Suppose line number is in the form "  ln 1".
+			lineNumList = api.getStatusBar().name.split(" ")
+			lineNum = lineNumLisst[2]+linenumList[3]
+			ui.message(lineNum)
 		
+		__gestures={
+			"kb:NvDA+S":"sayLineNumber"
+		}
+
+So whenever you run Notepad, when you press NVDA+S, NVDA will say line number.
+
+### Example 3: Silencing NVDA in Openbook ###
+
+Openbook is a scanning and reading program from Freedom scientifi.c Since Openbook provides speech, you can tell NVDA to enter sleep mode while Openbook (openbook.exe) is running using the below app module:
+
+	# Silencing NVDA in openbook, openbook.py.
+	import appModuleHandler
+	
+	class AppModule(appModuleHandler.AppModule):
+		sleepMode = True
+
+With that single line of code, NvDA will enter sleep mode in that program (you should do this only if the program provides speech and/or braille support on its own).
+
+### Other remarks on app modules ###
+
+Here are other remarks regarding app modules:
+
+* If you find that different versions of the program are laid out differently e.g. locations for controls are different, then you can write code which can handle these cases. There are a number of options you can choose from: adding some constants in your app module to handle different object locations, writing code for these controls (one per version) in custom objects which will be chosen in overlay class method and so on.
+* To support an application that works the same as another program (especially if you're writing app module for a 64-bit version of a 32-bit program for which you wrote an app module for), use the following code fragment:  
+	from appName import *
+where appName is the name of the app module and * (asterisk or star) means import everything. For an example of this, look at NvDA's app modules for Miranda32 and Miranda64.
+* If you wish to extend an app module that comes with NVDA, use the following code fragment:  
+	from nvdaBuiltin.appModules.appName import *
+Where appName is the app module you wish to extend. For example, if you wish to support different controls in Windows calculator (calc.py), use:  
+	from nvdaBuiltin.appModules.calc import *
+* Many app modules (both built-in and third-party ones) uses app names as part of the name for a constant (a value that doesn't change). For example, in NvDA's Powerpoint module (powerpnt.py), many constants starts with "PP". Similarly, in Station Playlist Studio app module, many constants in the app module file (splstudio.py) starts with "SPL". This is used to remind you where this constants are used.
+
+
+
 
 # Future sections #
 
@@ -670,10 +752,10 @@ A chapter devoted to global plugins.
 
 Planned sections:
 
-* What exactly is global plugin.
-* Importance of consulting NvDA and add-on commands to minimize command conflicts (done, see the section on add-on components).
-* When not to use global plugins.
-* A few worked out examples.
+* What exactly is global plugin (done).
+* Importance of consulting NvDA and add-on commands to minimize command conflicts (done, see the section on add-on components) (done).
+* When not to use global plugins (done).
+* A few worked out examples (few more needed).
 * These sections may change.
 
 ## App Modules ##
