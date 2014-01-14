@@ -701,7 +701,7 @@ So whenever you run Notepad, when you press NVDA+S, NVDA will say line number.
 
 ### Example 3: Silencing NVDA in Openbook ###
 
-Openbook is a scanning and reading program from Freedom scientifi.c Since Openbook provides speech, you can tell NVDA to enter sleep mode while Openbook (openbook.exe) is running using the below app module:
+Openbook is a scanning and reading program from Freedom scientific. Since Openbook provides speech, you can tell NVDA to enter sleep mode while Openbook (openbook.exe) is running using the below app module:
 
 	# Silencing NVDA in openbook, openbook.py.
 	import appModuleHandler
@@ -724,6 +724,28 @@ where appName is the name of the app module and * (asterisk or star) means impor
 Where appName is the app module you wish to extend. For example, if you wish to support different controls in Windows calculator (calc.py), use:  
 	from nvdaBuiltin.appModules.calc import *
 * Many app modules (both built-in and third-party ones) uses app names as part of the name for a constant (a value that doesn't change). For example, in NvDA's Powerpoint module (powerpnt.py), many constants starts with "PP". Similarly, in Station Playlist Studio app module, many constants in the app module file (splstudio.py) starts with "SPL". This is used to remind you where this constants are used.
+
+## Sharing your add-on and experience with others ##
+
+Once you've finished developing your add-ons, you might want to share your code with others. Along the way, you might contribute your know-how so others may benefit from your experiences.
+
+This chapter is designed to give some guidance on add-on release and maintenance, as well as connecting with your add-on users and other NvDA core and add-on developers around the world.
+
+### The NVDA Add-ons list ###
+
+If you want to keep in touch with your add-on users or want to learn from or contribute your add-on to others, please subscribe to [NVDA add-ons list][4]. This is a low traffic list devoted to discussing current and future add-ons, as well as to review other add-ons created by members of the community or have your add-on reviewed by other add-on developers around the world.
+
+### The NVDA Community Add-ons website and code repository ###
+
+To download or learn more about various add-ons created by NVDA users, visit [NvDA Community Add-ons website][5]. You can browse currently available add-ons, view add-ons under development and read add-on development guidelines.
+
+For developers seeking to explore actual code which powers add-ons, you can visit [NVDA Community Add-ons code repository][6] hosted at Bitbucket. To contribute your code, you may either create a Bitbucket acount, then ask on the NVDA Add-ons list to be invited to the NVDA Add-on Team or send an email to the maintainer of the add-on you wish to contribute. NVDA Add-on Team uses [Git][7] for version control.
+
+## Miscellaneous information ##
+
+Please add additional material to this guide. We at NVDA Add-on Team welcome contributions from other add-on developers and users around the world.
+
+
 
 
 
@@ -776,9 +798,7 @@ Planned sections:
 
 A chapter devoted to driver development.
 
-## Misc items ##
 
-Includes Bitbucket repo, add-ons lisst, other topics and contact information.
 
 [1]: http://community.nvda-project.org/wiki/Development
 [2]: http://community.nvda-project.org/documentation/developerGuide.html
