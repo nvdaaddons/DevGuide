@@ -42,7 +42,7 @@ Currently, the following add-on modules are supported. Note that an add-on may i
 * App module: An app module allows enhanced support for a program, such as specific windows or controls of a program such as audio editors.
 * Driver: A driver allows a program to talk to hardware. Currently one can write drivers for new braille displays or speech synthesizers.
 
-Each NVDA add-on package (composed of one or more add-on modules) is a zip file with the file extension of .nvda-addon. These can be installed via Add-ons Manager, found in NvDA 2012.2 or later. Alternativley, one can install them from file manager if one uses NVDA 2012.3 or later installed on the computer.
+Each NVDA add-on package (composed of one or more add-on modules) is a zip file with the file extension of .nvda-addon. These can be installed via Add-ons Manager, found in NvDA 2012.2 or later. Alternatively, one can install them from file manager if one uses NVDA 2012.3 or later installed on the computer.
 
 Throughout this guide, we refer to standard NVDA modules which comes with NVDA as "NvDA Core" to distinguish it from add-on modules.
 
@@ -293,7 +293,7 @@ In NVDA, an object is representation of a control or parts of a program. This in
 
 The NVDA objects (or simply called objects) contains a number of useful properties or atributes. These include the object's name, its value (checked, text of the edit window, etc.), role (check box, window, embedded object, etc., location (screen coordinates) and more. NVDA objects also contain useful methods for manipulating them, such as changing the value of the object, reacting to events for the object (gains focus, value changed, etc.) and so on.
 
-In many situations, an NvDA object may belong to a class of related objects. For each object classes, NvDA provides ways of handling them. These classes include IAccessible, JAB, UIA and so forth. These classes and behaviors for each class of objects is defined in NVDAObjects directory in the NvDA source code, and to use them in your add-on, import the appropriate object class handler for the object you're using (e.g. if you're working with an IAccessible object, impore NVDAObjects.IAccessible.).
+In many situations, an NvDA object may belong to a class of related objects. For each object classes, NvDA provides ways of handling them. These classes include IAccessible, JAB, UIA and so forth. These classes and behaviors for each class of objects is defined in NVDAObjects directory in the NvDA source code, and to use them in your add-on, import the appropriate object class handler for the object you're using (e.g. if you're working with an IAccessible object, import NVDAObjects.IAccessible.).
 
 Two of these object classes merit special mention: virtual buffers and tree interceptors. A tree interceptor allows NvDA to work with a "tree" of objects as though they are just one object. A special case of tree interceptor is virtual buffer, which allows NVDA to work with complex documents such as PDF documents.
 
