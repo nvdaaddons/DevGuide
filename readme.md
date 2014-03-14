@@ -711,6 +711,17 @@ Openbook is a scanning and reading program from Freedom scientific. Since Openbo
 
 With that single line of code, NVDA will enter sleep mode in that program (you should do this only if the program provides speech and/or braille support on its own).
 
+### Useful app module properties and methods ###
+
+`sleepMode` isn't the only property that app modules have. Other useful properties and methods used in app modules include the following:
+
+* appName: the name of the app (usually the name of the executable).
+* productName: Records the actual product name for the app.
+* productVersion: Records the version of the app.
+* is64BitProcess: if true, the app is a 64-bit process (only true if you're using a 64-bit app under 64-bit Windows versions).
+
+And other properties. Type dir(obj.appModule) from Python Console for the complete list.
+
 ### Other remarks on app modules ###
 
 Here are other remarks regarding app modules:
