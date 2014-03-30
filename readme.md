@@ -23,6 +23,7 @@ Copyright: NVDA is copyright 2006-2014 NV Access. Microsoft Windows, Microsoft O
 To create an add-on for NVDA, please make sure the following system requirements are met:
 
 * A version of NVDA is available on your computer (either a portable or installed version will work, but we strongly recommend that you install a copy of NVDA on your development computer). Download NVDA from NV Access page at http://www.nvaccess.org.
+* We recommend installing the latest master development version to keep up to date with core API changes. You can download the latest snapshots at http://community.nvda-project.org/wiki/Snapshots.
 * Python 2.7 series, version 2.7.6 32-bit for Windows: <http://www.python.org/download/releases/2.7.6/>
 * SCons 2, version 2.3.0 for generating add-on packages: <http://www.scons.org/>
 * Markdown 2.0.1 or later for generating add-on documentation: <https://pypi.python.org/pypi/Markdown/2.0.1>
@@ -95,7 +96,7 @@ To edit .py files, you need a word processor which can handle .py files. The bes
 
  Your add-on code is stored in one or more Python files (.py file). Despite different kinds of add-ons out there, they all have similar layout.
  
- First, you start by writing an optional header for your add-on, such as your name, a brief sentence or two on what the add-on is for and so on. Although this is optional, it is recommend that you write the header as a reminder to keep track of what you are doing with your add-on.
+ First, you start by writing an optional header for your add-on, such as your name, a brief sentence or two on what the add-on is for and so on. Although this is optional, it is recommended that you write the header as a reminder to keep track of what you are doing with your add-on.
  
  Next, you tell NVDA the modules you need for your add-on file. This is done by writing `import module` where module is the name of the module you wish to use in your code. For example, if you want to hear tones while writing your add-on, write `import tones`. Typically you may need to import two or more modules for your specific add-on (see below on list of modules you need for the type of add-on module you are writing).
  
@@ -481,7 +482,8 @@ Because of the above rule, one should be careful when defining a script for an a
 ### Few other remarks on scripts ###
 
 * You can define a script category to show the user where your add-on script will be used (shown in Input Gestures dialog in NVDA 2013.3 or later). There are two ways of doing this: module level via `scriptCategory` attribute from the add-on module, or designating the category for each script via `script_name.category` attribute. It is recommended that you name your script category the same as the add-on name.
-* You can define the input help mode message for a script by using `__doc__` attribute.
+* You can define the input help mode message for a script by using `__doc__` attribute. The __doc__ attribute is also used in Input Gestures dialog to show the description for a script.
+* If you need to leave one or more scripts unassigned (for example, if a gesture conflicts with a global command), do not include the gesture binding for the script in the gestures dictionary. This helps minimize gesture conflicts and allows users to assign custom gestures for scripts.
 
 ### Events ###
 
