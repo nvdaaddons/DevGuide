@@ -807,4 +807,4 @@ A chapter devoted to driver development.
 
 [1]: http://community.nvda-project.org/wiki/Development
 [2]: http://community.nvda-project.org/documentation/developerGuide.html
-[3]: https://bitbucket.org/nvdaaddonteam/addontemplate/get/master.tar.gz
+[3]: https://bitbucket.org/nvdaaddonteam/addontemplate/get/master.zip
