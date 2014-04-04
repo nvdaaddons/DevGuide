@@ -775,7 +775,6 @@ Planned sections (please feel free to contribute your knowledge in this section)
 
 * Events and list of available events (not quite done).
 * Script lookup process and conflicts (done, may need additional tips from others).
-* Static and dynamic script bindings, gesture dictionaries and script categories (categories are not done).
 * Debugging add-ons.
 * If something goes wrong (common errors and exceptions).
 * Few working and non-working examples for each topic.
@@ -787,9 +786,6 @@ A chapter devoted to global plugins.
 
 Planned sections:
 
-* What exactly is global plugin (done).
-* Importance of consulting NVDA and add-on commands to minimize command conflicts (done, see the section on add-on components) (done).
-* When not to use global plugins (done).
 * A few worked out examples (few more needed).
 * These sections may change.
 
@@ -799,12 +795,8 @@ A chapter devoted to app modules.
 
 Planned sections:
 
-* What is an app module.
-* App module scripts.
-* Defining objects representing different parts of a program.
-* Silencing NVDA for a program.
-* How app developers can help NVDA users through accessible app designs.
-* A few worked out examples and examples from existing app modules from NVDA core and from community.
+* How app developers can help NVDA users through accessible app designs (not written yet).
+* A few worked out examples and examples from existing app modules from NVDA core and from community (more examples needed).
 * These topics may change.
 
 ## Drivers ##
