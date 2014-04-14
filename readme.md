@@ -23,7 +23,7 @@ Copyright: NVDA is copyright 2006-2014 NV Access. Microsoft Windows, Microsoft O
 To create an add-on for NVDA, please make sure the following system requirements are met:
 
 * A version of NVDA is available on your computer (either a portable or installed version will work, but we strongly recommend that you install a copy of NVDA on your development computer). Download NVDA from NV Access page at http://www.nvaccess.org.
-* We recommend installing the latest master development version to keep up to date with core API changes. You can download the latest snapshots at http://community.nvda-project.org/wiki/Snapshots.
+ * We recommend installing the latest master development version to keep up to date with core API changes. You can download the latest snapshots at http://community.nvda-project.org/wiki/Snapshots.
 * Python 2.7 series, version 2.7.6 32-bit for Windows: <http://www.python.org/download/releases/2.7.6/>
 * SCons 2, version 2.3.0 for generating add-on packages: <http://www.scons.org/>
 * Markdown 2.0.1 or later for generating add-on documentation: <https://pypi.python.org/pypi/Markdown/2.0.1>
@@ -245,6 +245,7 @@ The following lists available NVDA core modules and some useful methods found in
 * Touchscreen support (touchHandler.py): Provides support for touchscreen input (installed versions only).
 * Tone output (tones.py): Allows the user to hear tones.
 * User interface messages (ui.py): Includes ui.message method used to speak or braille certain text.
+* UIA support (UIAHandler.py, UIA objects): Used for supporting UIA (User Interface Automation) controls.
 * Virtual buffers (virtualBuffers): Handles virtual buffer documents such as websites.
 
 The modules without .py extension are directories, containing specialist modules.
@@ -262,7 +263,7 @@ From api.py:
 * `api.getFocusObject()`: Retrieves the focused control (returns the object with focus).
 * `api.getNavigatorObject()`: Fetches the current navigator object. If NVDA is set to follow system focus, the focus and navigator object will be the same, otherwise a different object is returned.
 * `api.getForegroundObject()`: Returns the foreground window of the current application (the parent of this object is the application itself).
-* These have a corresponding method to set certain object as the focus or navigator object.
+* These have a corresponding method to set certain object as the focus or navigator object. Note that these lets NVDA see the new focus or navigator object but does not actually change system focus.
 
 From logHandler:
 
@@ -419,7 +420,7 @@ Another way to bind scripts is via runtime insertion. This is done by creating a
 
 In a similar manner to scripts, the UI module allows you to say or braille what your add-on is doing. This is done by using `ui.message(something to say)` where `something to say` is replaced by a string for NVDA to say. We'll not go over `ui.message` here (you'll see examples of those), but what's more important is scripts, so we'll focus on that in this section.
 
-As of time of writing, NVDA supports input from the keyboard, braille displays with or without braille keyboard and touchscreens. Output can be sent via speech and/or braille.
+As of time of writing, NVDA supports input from the keyboard, braille displays with or without braille keyboard and touchscreens. These input types have a corresponding gesture prefix (kb for keyboard, br for braille and ts for touchscreen) which identifies the type of gesture. Output can be sent via speech and/or braille.
 
 ### Example 2: A basic script dictionary and message output ###
 
