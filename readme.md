@@ -2,6 +2,9 @@
 
 # NVDA Add-on Development Guide
 
+Author: Joseph Lee and contributors
+Published: May 2014
+
 Welcome to NVDA Add-on Development Guide. This is the one-stop guide on how NVDA add-ons are developed, as well as explaining some useful code segments from NVDA core source code useful when writing add-ons.
 
 For more information on NVDA development, please visit [NVDA Community Development page][1]. Be sure to go over [NVDA Developer Guide][2] to familiarize yourself with key terms and basics on getting started with add-on development.
