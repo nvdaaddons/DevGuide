@@ -325,7 +325,7 @@ Here are some other methods which works with NVDA objects, all located in api.py
 
 * If you wish to obtain the foreground object (useful if you wish to look at some child object of the foreground window), use `obj = api.getForegroundObject()`.
 * From Python Console, to see the number of child objects that an object contains (for instance, the children, or widgets of a foreground window), type `obj.childCount`. The value 0 means that there are no more child objects.
-* To set some object as the new focus or navigator object, use `api.setFocusObject(obj)` or `api.setNavigatorObject(obj)`. These does not change what Windows views as focused object, as these change what NVDA thinks is the focus and navigator object.
+* To set some object as the new focus or navigator object, use `api.setFocusObject(obj)` or `api.setNavigatorObject(obj)`. These do not change what Windows views as focused object, as these change what NVDA thinks is the focus and navigator object.
 * You can fetch various properties of an object by specifying obj.property where property is the attribute you wish to see (e.g. obj.value).
 
 ### Example 1: Finding the value of a slider in a program ###
