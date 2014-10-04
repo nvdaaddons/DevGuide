@@ -3,7 +3,7 @@
 # NVDA Add-on Development Guide
 
 Author: Joseph Lee and contributors
-Latest version: August 2014
+Latest version: October 2014
 
 Welcome to NVDA Add-on Development Guide. This is the one-stop guide on how NVDA add-ons are developed, as well as explaining some useful code segments from NVDA core source code useful when writing add-ons.
 
@@ -300,7 +300,7 @@ The NVDA objects (or simply called objects) contains a number of useful properti
 
 In many situations, an NVDA object may belong to a class of related objects. For each object classes, NVDA provides ways of handling them. These classes include IAccessible, JAB, UIA and so forth. These classes and behaviors for each class of objects is defined in NVDAObjects directory in the NVDA source code, and to use them in your add-on, import the appropriate object class handler for the object you're using (e.g. if you're working with an IAccessible object, import NVDAObjects.IAccessible.).
 
-Two of these object classes merit special mention: virtual buffers and tree interceptors. A tree interceptor allows NVDA to work with a "tree" of objects as though they are just one object. A special case of tree interceptor is virtual buffer, which allows NVDA to work with complex documents such as PDF documents.
+Two of these object classes merit special mention: virtual buffers and tree interceptors. A tree interceptor allows NVDA to work with a "tree" of objects as though they are just one object. A special case of tree interceptor is virtual buffer, which allows NVDA to work with complex documents such as PDF documents. These objects contain a special mechanism to determine whether a given keyboard command will be passed to the application or handled by NVDA (for instance, browse mode where first letter navigation is used to move between elements).
 
 ### Examining object hierarchy ###
 
@@ -323,7 +323,7 @@ In your add-on, to fetch the object with focus, write `someObj = api.getFocusObj
 
 Here are some other methods which works with NVDA objects, all located in api.py module:
 
-* If you wish to obtain the foreground object (useful if you wish to look at some child object of the foreground window), use `obj = api.getForegroundObject()`.
+* If you wish to obtain the foreground object (useful if you wish to look at some child object of the foreground window), use `obj = api.getForegroundObject()`. The name of the foreground object, usually the top-level window of an application is treated as a title by NVDA and can be obtained by pressing NVDA+T.
 * From Python Console, to see the number of child objects that an object contains (for instance, the children, or widgets of a foreground window), type `obj.childCount`. The value 0 means that there are no more child objects.
 * To set some object as the new focus or navigator object, use `api.setFocusObject(obj)` or `api.setNavigatorObject(obj)`. These do not change what Windows views as focused object, as these change what NVDA thinks is the focus and navigator object.
 * You can fetch various properties of an object by specifying obj.property where property is the attribute you wish to see (e.g. obj.value).
@@ -547,6 +547,19 @@ The above section described event routines from an add-on's perspective. This is
 ### Other components ###
 
 Besides objects, scripts and events, you can add other components in your add-on for working with specific controls. For example, you can use a textInfo module (such as NVDAObjects.NVDAObjectTextInfo) for working with text in edit fields and other controls, or use external modules from third-party developers for specialized tasks such as windows registry access (_winreg) and others. You can also use Python's built-in modules (such as time, functools, etc.) for advanced operations.
+
+If you wish to store settings for your add-on, use ConfigObj to store configuration files and settings.
+
+Finally, you can ask NVDA to perform some routines while the add-on is loading. This is done by defining `__init__` method for the add-on. Depending on the plugin type, use:
+
+* For global plugin:
+	def __init__(self):
+		super(GlobalPlugin, self).__init__()
+		# The routine to do when the global plugin loads.
+* For app modules:
+	 def __init__(self, *args, **kwargs):
+		super(AppModule, self).__init__(*args, **kwargs)
+		# What NvDA should do when the app module loads.
 
 ### Let's build an add-on ###
 
