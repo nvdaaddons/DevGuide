@@ -3,7 +3,7 @@
 # NVDA Add-on Development Guide
 
 Author: Joseph Lee and contributors
-Latest version: October 2014
+Latest version: January 2015
 
 Welcome to NVDA Add-on Development Guide. This is the one-stop guide on how NVDA add-ons are developed, as well as explaining some useful code segments from NVDA core source code useful when writing add-ons.
 
@@ -240,7 +240,8 @@ The following lists available NVDA core modules and some useful methods found in
 * Keyboard input (keyboardHandler.py): Supports entering commands from the keyboard.
 * Logging facility (logHandler.py): Allows a module to write logs to be viewed by a developer or a user via Log Viewer.
 * Mouse support (mouseHandler.py): Supports mouse commands.
-* NVDA objects collection (NVDAObjects): A collection of NVDA objects or controls used in many applications and standards such as UIA (User Interface Automation).
+* NVDA objects collection (NVDAObjects): A collection of NVDA objects or controls used in many applications and standards such as UIA (User Interface Automation). Some objects require special actions to be performed, and these are specified in behaviors module in NvDA objects package.
+* Review facility (review.py): assists with working with review cursor.
 * Scripts support (scriptHandler.py): Handles scripts, methods executed due to the user pressing keyboard commands and other input.
 * Speech output (speech.py): Controls speech output.
 * Synthesizer driver support (synthDriverHandler.py): This is the core module needed for speech synthesizer add-ons.
@@ -251,7 +252,7 @@ The following lists available NVDA core modules and some useful methods found in
 * UIA support (UIAHandler.py, UIA objects): Used for supporting UIA (User Interface Automation) controls.
 * Virtual buffers (virtualBuffers): Handles virtual buffer documents such as websites.
 
-The modules without .py extension are directories, containing specialist modules.
+The modules without .py extension are directories, containing specialist modules. In addition, NVDA provides wrappers for Windows libraries (DLL's) such as Windows User (user32.dll wrapped in winUser.py), Windows Kernel (kernel32.dll wrapped in winKernel.py) and so on used in some specialist situation when using Windows API is a must (such as sending messages back and forth in an app module).
 
 ### Useful methods ###
 
@@ -550,7 +551,7 @@ Besides objects, scripts and events, you can add other components in your add-on
 
 If you wish to store settings for your add-on, use ConfigObj to store configuration files and settings.
 
-Finally, you can ask NVDA to perform some routines while the add-on is loading. This is done by defining `__init__` method for the add-on. Depending on the plugin type, use:
+Finally, you can ask NVDA to perform some routines while the add-on is loading or being terminated. This is done by defining `__init__` and `terminate` method for the add-on. Depending on the plugin type, use:
 
 * For global plugin:
 	def __init__(self):
@@ -560,6 +561,11 @@ Finally, you can ask NVDA to perform some routines while the add-on is loading. 
 	 def __init__(self, *args, **kwargs):
 		super(AppModule, self).__init__(*args, **kwargs)
 		# What NvDA should do when the app module loads.
+
+* For terminating, regardless of the add-on type:
+	def terminate(self):
+		# Do something when the add-on terminates.
+		# Warning! Never initialize ANY core module such as GUI in terminate method as doing so will prevent NVDA from exiting properly.
 
 ### Let's build an add-on ###
 
@@ -600,7 +606,7 @@ Q. The command for my app module does not work in my app module; instead, NVDA d
 Check if a global plugin which uses the command is installed. First, remove the global plugin and try again.
 
 Q. How can I use Win32 API in my add-on or object?
-There is a document written by an add-on developer which talks about using Win32 API in your add-on.
+There is a document written by an add-on developer which talks about using Win32 API in your add-on. Select [this link][4] to view this document.
 
 Q. How can I create dialogs in my add-on?
 You need to import two modules: GUI (import gui) and WXPython (import wx).
@@ -613,6 +619,9 @@ Yes. You'll need to use ConfigObj library (configObj) to manage configuration. S
 
 Q. I have a script which calls a function that runs for a long time, and I cannot run NVDA commands when my script runs.
 One way to fix this is using threads (separate, independent  operations in a program) via Python's threading module. In order to do this, create a method which you know will run for a long time, then from the script which calls this method, create a new thread (see Python's threading module documentation) that'll be in charge of running this method. This way other NVDA commands can be performed while the add-on method does its work (see Google Speech Recognition module for an example code).
+
+Q. I would like to port a module written in Python 3 syntax for use as an NVDA add-on.
+This cannot be done easily. One handy module for this purpose is six, which allows running Python 2 and 3 code. NvDA itself uses Python 2 as WXPython uses Python 2, and until WXPython is rewritten to support Python 3, you cannot run Python 3 code in NVDA.
 
 We did not include programming or Python-related FAQ's, as there are sites which answers questions about Python such as coding style. Consult these documents if you have issues with Python code.
 
@@ -676,7 +685,7 @@ The global plugin, named brailleWrite.py, would look like this:
 		brlentry = False # Braille entry is not active.
 		
 		def script_toggleBrailleEntry(self, gesture):
-			self.brlentry = True if self.brlentry == False else False # Toggle braille entry mode.
+			self.brlentry = True if not self.brlentry else False # Toggle braille entry mode.
 		script_toggleBrailleEntry.__doc__="Toggles braille entry on or off."
 		__gestures={
 			"kb:NVDA+X":"toggleBrailleEntry"
@@ -717,7 +726,7 @@ A typical app module is developed thus:
 
 As you write app modules, try these tips:
 
-1. Use objects to represent parts of a program. This is done in two steps: define the control for parts of a program via objects (inheriting from some object such as IAccessible), then use `chooseNVDAObjectOverlayClasses` routine to tell NVDA to work with your custom object when working with that control.
+1. Use objects to represent parts of a program. This is done in two steps: define the control for parts of a program via objects (inheriting from some object such as IAccessible), then use `chooseNVDAObjectOverlayClasses` routine to tell NVDA to work with your custom object when working with that control. See overlay classes section for tips.
 2. If possible, test your app module using two or more versions of the program to make sure your app module works with those versions.
 3. You should not incorporate all desired features in version 1.0 - leave some of them for a future release.
 
@@ -735,7 +744,7 @@ The app module for Notepad would look like this:
 	class AppModule(appModuleHandler.AppModule):
 		def script_sayLineNumber(self, gesture):
 			# Suppose line number is in the form "  ln 1".
-			lineNumList = api.getStatusBar().name.split(" ")
+			lineNumList = api.getStatusBar().name.split()
 			lineNum = lineNumLisst[2]+linenumList[3]
 			ui.message(lineNum)
 		
@@ -773,6 +782,7 @@ And other properties. Type dir(obj.appModule) from Python Console for the comple
 Here are other remarks regarding app modules:
 
 * If you find that different versions of the program are laid out differently e.g. locations for controls are different, then you can write code which can handle these cases. There are a number of options you can choose from: adding some constants in your app module to handle different object locations, writing code for these controls (one per version) in custom objects which will be chosen in overlay class method and so on.
+* If possible, try working with services that the app provides, such as COM (Component Object Model) methods (for example, Outlook app module), API's the app provides (such as Winamp) and so on.
 * To support an application that works the same as another program (especially if you're writing app module for a 64-bit version of a 32-bit program for which you wrote an app module for), use the following code fragment:  
 	from appName import *
 where appName is the name of the app module and * (asterisk or star) means import everything. For an example of this, look at NVDA's app modules for Miranda32 and Miranda64.
@@ -852,3 +862,4 @@ A chapter devoted to driver development.
 [1]: http://community.nvda-project.org/wiki/Development
 [2]: http://community.nvda-project.org/documentation/developerGuide.html
 [3]: https://bitbucket.org/nvdaaddonteam/addontemplate/get/master.zip
+[4]: http://www.zlotowicz.pl/nvda/winapi.mdwn
