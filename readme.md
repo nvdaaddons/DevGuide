@@ -3,7 +3,7 @@
 # NVDA Add-on Development Guide
 
 Author: Joseph Lee and contributors
-Latest version: January 2015
+Latest version: August 2015 for NvDA 2015.3
 
 Welcome to NVDA Add-on Development Guide. This is the one-stop guide on how NVDA add-ons are developed, as well as explaining some useful code segments from NVDA core source code useful when writing add-ons.
 
@@ -19,7 +19,7 @@ If you are new to NVDA add-on or core development, we recommend that you get to 
 
 This guide was originally written by Joseph Lee and is shaped by NVDA user and developer community. We welcome your feedback and contribution.
 
-Copyright: NVDA is copyright 2006-2014 NV Access. Microsoft Windows, Microsoft Office, Win32 API and other MS products are copyright Microsoft Corporation. IAccessible package is copyright IBM and Linux Foundation. Python is copyright Python Foundation. Other products mentioned are copyrighted by authors of these products.
+Copyright: NVDA is copyright 2006-2015 NV Access. Microsoft Windows, Microsoft Office, Win32 API and other MS products are copyright Microsoft Corporation. IAccessible package is copyright IBM and Linux Foundation. Python is copyright Python Foundation. Other products mentioned are copyrighted by authors of these products.
 
 ## System requirements ##
 
@@ -27,7 +27,7 @@ To create an add-on for NVDA, please make sure the following system requirements
 
 * A version of NVDA is available on your computer (either a portable or installed version will work, but we strongly recommend that you install a copy of NVDA on your development computer). Download NVDA from NV Access page at http://www.nvaccess.org.
  * We recommend installing the latest master development version to keep up to date with core API changes. You can download the latest snapshots at http://community.nvda-project.org/wiki/Snapshots.
-* Python 2.7 series, version 2.7.8 32-bit for Windows: <http://www.python.org/download/releases/2.7.8/>
+* Python 2.7 series, version 2.7.10 32-bit for Windows: <http://www.python.org/download/releases/2.7.10/>
 * SCons 2, version 2.3.0 for generating add-on packages: <http://www.scons.org/>
 * Markdown 2.0.1 or later for generating add-on documentation: <https://pypi.python.org/pypi/Markdown/2.0.1>
 * GNU Gettext package for Windows for message localization support. The build can be found at: <http://gnuwin32.sourceforge.net/downlinks/gettext.php>
@@ -239,6 +239,7 @@ The following lists available NVDA core modules and some useful methods found in
 * Java Access Bridge support (JABHandler.py): A collection of methods used for supporting JAB subsystem used for Java applications.
 * Keyboard input (keyboardHandler.py): Supports entering commands from the keyboard.
 * Logging facility (logHandler.py): Allows a module to write logs to be viewed by a developer or a user via Log Viewer.
+* Math content presentation (MathPress packages): allows NVDA to recognize and interact with various math content and markup. NvDA ships with MathML support package and support for Math Player is included in 2015.2 or later.
 * Mouse support (mouseHandler.py): Supports mouse commands.
 * NVDA objects collection (NVDAObjects): A collection of NVDA objects or controls used in many applications and standards such as UIA (User Interface Automation). Some objects require special actions to be performed, and these are specified in behaviors module in NvDA objects package.
 * Review facility (review.py): assists with working with review cursor.
@@ -557,6 +558,7 @@ Finally, you can ask NVDA to perform some routines while the add-on is loading o
 	def __init__(self):
 		super(GlobalPlugin, self).__init__()
 		# The routine to do when the global plugin loads.
+		# Warning! You should always call super method first in order to initialize various foundations correctly.
 * For app modules:
 	 def __init__(self, *args, **kwargs):
 		super(AppModule, self).__init__(*args, **kwargs)
@@ -714,6 +716,7 @@ At first glance, app modules may look the same as any global plugin. However, ap
 * App modules are stored in appModules folder in your add-on directory structure and is named the same as the executable name of the program.
 * You can ask NVDA to enter sleep mode in a program where NVDA will not speak or braille anything while using the program, and any keyboard commands you press will be handled by the program directly. This is done by setting `sleepMode` attribute in the AppModule class to True.
 * The `event_NVDAObject_init` routine is only available in app modules.
+* You can ask NVDA to keep an eye on an object to handle events for them even if the user is using another app.
 
 ### App module development process and strategies ###
 
@@ -766,9 +769,28 @@ Openbook is a scanning and reading program from Freedom scientific. Since Openbo
 
 With that single line of code, NVDA will enter sleep mode in that program (you should do this only if the program provides speech and/or braille support on its own).
 
+### Example 4: Announcing control property changes while using another app ###
+
+You can ask NVDA to handle specific events while focused on another app. This is done by calling eventHandler.requestEvents in app module's __init__ method. In order to invoke this, you need process ID (PID) for the application, window class name for the object and the name of the event to be handled.
+
+The below code allows NVDA to announce value changes while focused on another application.
+
+	# The example app module for a messenger app.
+	# The object we wish to track has window class name of "MessengerWindow".
+	
+	import appModuleHandler
+	import eventHandler
+	
+	class AppModule(appModuleHandler.AppModule):
+		def __init__(self, *args, **kwargs):
+			super(AppModule, self).__init__(*args, **kwards)
+			eventHandler.requestEvents(self.processID, "MessengerWindow", "valueChange")
+
+Once defined, even if focused in another app, new messages (values) will be announced.
+
 ### Useful app module properties and methods ###
 
-`sleepMode` isn't the only property that app modules have. Other useful properties and methods used in app modules include the following:
+`sleepMode` and `processID` are just two of many attributes that app modules have. Other useful properties and methods used in app modules include the following:
 
 * appName: the name of the app (usually the name of the executable).
 * productName: Records the actual product name for the app.
@@ -791,6 +813,28 @@ where appName is the name of the app module and * (asterisk or star) means impor
 Where appName is the app module you wish to extend. For example, if you wish to support different controls in Windows calculator (calc.py), use:  
 	from nvdaBuiltin.appModules.calc import *
 * Many app modules (both built-in and third-party ones) uses app names as part of the name for a constant (a value that doesn't change). For example, in NVDA's Powerpoint module (powerpnt.py), many constants starts with "PP". Similarly, in Station Playlist Studio app module, many constants in the app module file (splstudio.py) starts with "SPL". This is used to remind you where this constants are used.
+
+## Drivers
+
+A driver allows a software such as NvDA to communicate with hardware or use functionality provided by another software. Typically, when people speak of drivers, they usually refer to a program installed on a computer that allows software to communicate with a specific hardware, such as video cards, keyboards and so on.
+
+In NVDA, drivers refer to modules that NVDA can use to communicate with a speech synthesizer or a braille display. For instance, you can write a braille display driver that sends braille output to your braille display, or ask your synthesizer to switch languages and provide configurable settings.
+
+### Few important things to remember before, during and after driver development
+
+* Before writing a driver, make sure you have the needed software and/or hardware.
+* Be sure to study protocols and API's used by a speech synthesizer or a braille display (this is more so for braille displays which may implement different protocols).
+* Make sure you know how to communicate with your equipment - ports, USB ID's, Bluetooth addresses, serial port settings and so on.
+* Work with another person who happens to use the equipment or software you are writing driver(s) for.
+
+### Typical driver development steps
+
+When writing drivers, you may wish to follow the recommended steps for app module development (planning, talking to vendors, user test, etc.). However, since drivers require intimate knowledge of hardware and/or software, you should spend more time on testing your driver. This is more so if you are writing a driver for a braille display which can send arbitrary commands (braille commands, routing buttons, etc.).
+
+### Braille display drivers
+
+
+
 
 ## Sharing your add-on and experience with others ##
 
