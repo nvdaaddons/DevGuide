@@ -33,4 +33,4 @@ StationPlaylist Studio:
 * Source code: http://bitbucket.org/nvdaaddonteam/stationplaylist
 * Add-on Internals (author: Joseph Lee): https://bitbucket.org/nvdaaddonteam/stationplaylist/wiki/spladdoninternals
 
-[1]: http://www.bitbucket.org/nvdaaddonteam/stationplaylist/wiki/addondevguide
+[1]: http://www.bitbucket.org/nvdaaddonteam/devguide/addondevguide
