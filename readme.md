@@ -37,6 +37,12 @@ StationPlaylist Studio:
 * Source code: http://bitbucket.org/nvdaaddonteam/stationplaylist
 * Add-on Internals (author: Joseph Lee): https://bitbucket.org/nvdaaddonteam/stationplaylist/wiki/spladdoninternals
 
+SysTray List:
+* Add-on authors: Rui Fontes, Rui Batista
+* Source code: http://bitbucket.org/nvdaaddonteam/systraylist
+* Add-on Internals (author: Joseph Lee): https://bitbucket.org/nvdaaddonteam/devguide/wiki/stladdoninternals
+
+
 [1]: http://bitbucket.org/nvdaaddonteam/devguide/wiki/addondevguide
 
 [2]: http://bitbucket.org/nvdaaddonteam/devguide/wiki/contributing
