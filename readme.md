@@ -33,11 +33,13 @@ To view the latest version of add-on development guide, select the following lin
 The NVDA Add-on Internals is a series of articles explaining how community add-ons work. The following articles are available:
 
 StationPlaylist Studio:
+
 * Add-on authors: Geoff Shang, Joseph Lee and others
 * Source code: http://bitbucket.org/nvdaaddonteam/stationplaylist
 * Add-on Internals (author: Joseph Lee): https://bitbucket.org/nvdaaddonteam/stationplaylist/wiki/spladdoninternals
 
 SysTray List:
+
 * Add-on authors: Rui Fontes, Rui Batista
 * Source code: http://bitbucket.org/nvdaaddonteam/systraylist
 * Add-on Internals (author: Joseph Lee): https://bitbucket.org/nvdaaddonteam/devguide/wiki/stladdoninternals
