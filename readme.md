@@ -19,6 +19,10 @@ Thank you, and I hope you find this collection useful as you continue to learn a
 Sincerely,
 Joseph S. Lee
 
+## Contributions
+
+Please read [this page][2] to learn how you can contribute.
+
 ## Add-on development documentation
 
 To view the latest version of add-on development guide, select the following link:
@@ -34,3 +38,5 @@ StationPlaylist Studio:
 * Add-on Internals (author: Joseph Lee): https://bitbucket.org/nvdaaddonteam/stationplaylist/wiki/spladdoninternals
 
 [1]: http://bitbucket.org/nvdaaddonteam/devguide/wiki/addondevguide
+
+[2]: http://bitbucket.org/nvdaaddonteam/devguide/wiki/contributing
