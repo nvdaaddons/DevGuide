@@ -45,6 +45,6 @@ SysTray List:
 * Add-on Internals (author: Joseph Lee): https://bitbucket.org/nvdaaddonteam/devguide/wiki/stladdoninternals
 
 
-[1]: http://bitbucket.org/nvdaaddonteam/devguide/wiki/addondevguide
+[1]: http://bitbucket.org/nvdaaddonteam/devguide/wiki/NVDA%20Add-on%20Development%20Guide
 
 [2]: http://bitbucket.org/nvdaaddonteam/devguide/wiki/contributing
