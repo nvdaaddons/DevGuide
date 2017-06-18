@@ -1,4 +1,4 @@
-# NVDA Add-on Guide
+# NVDA Add-on Guides
 
 Welcome to NVDA Add-on Guides. This repository contains documentation on NVDA add-ons, including add-on development guide, various user guides for add-ons and notes on add-on internals.
 
