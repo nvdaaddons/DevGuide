@@ -42,13 +42,13 @@ SysTray List:
 
 * Add-on authors: Rui Fontes, Rui Batista
 * Source code: http://bitbucket.org/nvdaaddonteam/systraylist
-* Add-on Internals (author: Joseph Lee): https://bitbucket.org/nvdaaddonteam/devguide/wiki/stladdoninternals
+* Add-on Internals (author: Joseph Lee): https://github.com/nvdaaddons/devguide/wiki/stladdoninternals
 
 Windows 10 App Essentials:
 
 * Add-on authors: Joseph Lee and others
 * Source code: https://github.com/josephsl/wintenapps
-* Add-on Internals (author: Joseph Lee): https://github.com/josephsl/stationplaylist/wiki/w10addoninternals
+* Add-on Internals (author: Joseph Lee): https://github.com/nvdaaddons/devguide/wiki/w10addoninternals
 
 [1]: https://github.com/nvdaaddons/devguide/wiki/NVDA%20Add-on%20Development%20Guide
 
