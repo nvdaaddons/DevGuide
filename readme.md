@@ -32,6 +32,12 @@ To view the latest version of add-on development guide, select the following lin
 
 The NVDA Add-on Internals is a series of articles explaining how community add-ons work. The following articles are available:
 
+Golden Cursor:
+
+* Add-on authors: Salah Atair, Wafeeq Taher, Joseph Lee
+* Source code: https://github.com/josephsl/goldenCursor
+* Add-on Internals (author: Joseph Lee): https://github.com/nvdaaddons/devguide/wiki/stladdoninternals
+
 StationPlaylist Studio:
 
 * Add-on authors: Geoff Shang, Joseph Lee and others
