@@ -36,7 +36,7 @@ Golden Cursor:
 
 * Add-on authors: Salah Atair, Wafeeq Taher, Joseph Lee
 * Source code: https://github.com/josephsl/goldenCursor
-* Add-on Internals (author: Joseph Lee): https://github.com/nvdaaddons/devguide/wiki/stladdoninternals
+* Add-on Internals (author: Joseph Lee): https://github.com/nvdaaddons/devguide/wiki/gcaddoninternals
 
 StationPlaylist Studio:
 
