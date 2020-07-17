@@ -14,7 +14,7 @@ We the community add-on reviewers team hope this collection will serve as a valu
 
 In closing, I'd like to say a few words regarding NVDA and this documentation collection. First, please remember that NonVisual Desktop Access is a free, open-source, community-driven screen reader which is licensed under GPL, and please respect copyrights and copyright holders (we the community add-on team release this documentation under GPL as well, and we welcome community contributions). Second, the views expressed by article authors, especially add-on articles, may not represent views of original add-on authors. Lastly, some articles require knowledge of Python, Windows API, accessibility standards and combination of these.
 
-Thank you, and I hope you find this collection useful as you continue to learn about NVDA screen reader. If you have any questions about these resources, please let us know by email or via Twitter (subscribe to NVDA add-ons list first, then send an email to nvda-addons@freelists.org; for Twitter, please use #NVDASR hash tag).
+Thank you, and I hope you find this collection useful as you continue to learn about NVDA screen reader. If you have any questions about these resources, please let us know by email or via Twitter ([subscribe](mailto:nvda-addons+subscribe@groups.io) to [NVDA Add-ons list](https://groups.io/g/nvda-addons) first, then send an email to [nvda-addons@groups.io](mailto:nvda-addons@groups.io); for Twitter, please use #NVDASR hash tag).
 
 Sincerely,
 Joseph S. Lee
